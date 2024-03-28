@@ -1,10 +1,13 @@
 package com.interhouse.accounts.service.impl;
 
 import com.interhouse.accounts.constants.AccountsConstants;
+import com.interhouse.accounts.dto.AccountsDto;
 import com.interhouse.accounts.dto.CustomerDto;
 import com.interhouse.accounts.entity.Accounts;
 import com.interhouse.accounts.entity.Customer;
 import com.interhouse.accounts.exception.CustomerAlreadyExistException;
+import com.interhouse.accounts.exception.ResourceNotFoundException;
+import com.interhouse.accounts.mapper.AccountsMapper;
 import com.interhouse.accounts.mapper.CustomerMapper;
 import com.interhouse.accounts.repository.AccountsRepository;
 import com.interhouse.accounts.repository.CustomerRepository;
@@ -63,6 +66,26 @@ public class AccountsServiceImpl implements IAccountsService {
 
         Customer savedCustomer = customerRepository.save(customer);     // 엔터티에 고객 저장
         accountsRepository.save(createNewAccount(savedCustomer));       // 엔터티에 앞서 고객의 계좌 저장
+    }
+
+    /**
+     * @param mobileNumber
+     * @return
+     */
+    @Override
+    public CustomerDto fetchAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+        );
+
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
+                () -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString())
+        );
+
+        CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+        customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
+
+        return customerDto;
     }
 }
 
