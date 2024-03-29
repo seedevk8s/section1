@@ -4,6 +4,9 @@ import com.interhouse.accounts.constants.AccountsConstants;
 import com.interhouse.accounts.dto.CustomerDto;
 import com.interhouse.accounts.dto.ResponseDto;
 import com.interhouse.accounts.service.IAccountsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -36,6 +39,14 @@ public class AccountsController {
      * @param customerDto
      * @return 고객 생성 하기 (고객 및 계좌 생성하기)
      */
+    @Operation(
+            summary = "Account REST API 생성하기",
+            description = "새로운 Customer & LesBank 내부의 Account 생성하기 위한 REST API"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "HTTP Status CREATED"
+    )
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
         iAccountsService.createAccount(customerDto);
@@ -50,6 +61,14 @@ public class AccountsController {
      * @param mobileNumber
      * @return 고객 읽기 기능
      */
+    @Operation(
+            summary = "Account 세부내용 Fetch(읽기)하기위한 REST API",
+            description = "Customer & mobile 번호 기반으로 한 Account 세부내용 fetch(읽기)하기 위한 REST API"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+    )
     @GetMapping("fetch")
     public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam
                                                                @Pattern(regexp = "(^$|[0-9]{10})", message = "모바일 번호는 반드시 10자여야 합니다.")
@@ -58,6 +77,20 @@ public class AccountsController {
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
 
+    @Operation(
+            summary = "Account 세부내용 Update 하기위한 REST API",
+            description = "Customer & account 번호 기반으로 한 Account 세부내용 수정하기 위한 REST API"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error"
+            )
+    })
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> updateAccountDetails(@Valid @RequestBody CustomerDto customerDto) {
         boolean isUpdated = iAccountsService.updateAccount(customerDto);
@@ -73,6 +106,20 @@ public class AccountsController {
 
     }
 
+    @Operation(
+            summary = "Account & Customer 세부내용 삭제하기위한 REST API",
+            description = "Customer & mobile 번호 기반으로 한 Account 세부내용 삭제하기 위한 REST API"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error"
+            )
+    })
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam
                                                                 @Pattern(regexp = "(^$|[0-9]{10})", message = "모바일 번호는 반드시 10자여야 합니다.")
