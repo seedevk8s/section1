@@ -40,8 +40,8 @@ public class AccountsServiceImpl implements IAccountsService {
         newAccount.setAccountNumber(randomAccNumber);               //계좌번호
         newAccount.setAccountType(AccountsConstants.SAVINGS);       //저축
         newAccount.setBranchAddress(AccountsConstants.ADDRESS);     //계좌발행 은행주소
-        newAccount.setCreatedAt(LocalDateTime.now());
-        newAccount.setCreatedBy("익명의");
+        //newAccount.setCreatedAt(LocalDateTime.now());
+        //newAccount.setCreatedBy("익명의");
         return newAccount;
 
     }
@@ -61,8 +61,8 @@ public class AccountsServiceImpl implements IAccountsService {
                                                         + customerDto.getMobileNumber());
         }
 
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("익명의");
+        //customer.setCreatedAt(LocalDateTime.now());
+        //customer.setCreatedBy("익명의");
 
         Customer savedCustomer = customerRepository.save(customer);     // 엔터티에 고객 저장
         accountsRepository.save(createNewAccount(savedCustomer));       // 엔터티에 앞서 고객의 계좌 저장
