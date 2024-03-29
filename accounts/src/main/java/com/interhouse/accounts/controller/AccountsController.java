@@ -4,6 +4,7 @@ import com.interhouse.accounts.constants.AccountsConstants;
 import com.interhouse.accounts.dto.CustomerDto;
 import com.interhouse.accounts.dto.ResponseDto;
 import com.interhouse.accounts.service.IAccountsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+    name = "CRUD APIs for Accounts in LesBank",
+    description = "CRUD APIs for Accounts in LesBank의 계좌 세부사항에 대한 생성,수정,읽기 그리고 삭제기능"
+)
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
